@@ -2,7 +2,9 @@ from dotenv import load_dotenv
 import os
 from google import genai
 
-client = genai.Client(api_key=os.getenv("GENAI_API_KEY"))
+load_dotenv()
+apiKey = os.getenv("GENAI_API_KEY")
+client = genai.Client(api_key=apiKey)
 
 def response (question,language) : 
     response = client.models.generate_content(

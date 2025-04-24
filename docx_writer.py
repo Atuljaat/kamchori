@@ -9,7 +9,7 @@ import time
 from generate_output import output_to_image
 from docx.shared import RGBColor
 from docx.shared import Inches
-
+import re
 
 # pixels = 800
 # dpi = 96
@@ -18,8 +18,16 @@ doc = Document()
 doc.add_heading('COLLEGE KI FILE', 0)
 doc.add_page_break()
 
-text = extract_text_from_pdf('PROGRAMS.pdf').splitlines()
+# text = extract_text_from_pdf('realtimeTesting.pdf').splitlines()
+# text = [line.strip() for line in text if re.match(r'^\d+\.', line.strip())]
+text = extract_text_from_pdf('realtimeTesting.pdf')
 
+# Step 2: Split text into questions based on numbers like 1., 2., 3., etc.
+questions = re.split(r'(?=\d+\.)', text)
+
+# Step 3: Clean up each question and remove empty ones
+questions = [q.strip() for q in questions if q.strip()]
+text = questions
 
 def write_to_docx (language,filename):
     for index , line in enumerate(text):
