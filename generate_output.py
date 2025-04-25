@@ -1,7 +1,7 @@
 from PIL import Image, ImageDraw, ImageFont
 
 def output_to_image(output_text, output_path):
-    font = ImageFont.truetype("arial.ttf", 20)
+    font = ImageFont.truetype("consola.ttf", 20)
     lines = output_text.splitlines()
 
     max_width = max(font.getbbox(line)[2] - font.getbbox(line)[0] for line in lines) + 20

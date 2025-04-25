@@ -20,17 +20,22 @@ doc.add_page_break()
 
 # text = extract_text_from_pdf('realtimeTesting.pdf').splitlines()
 # text = [line.strip() for line in text if re.match(r'^\d+\.', line.strip())]
-text = extract_text_from_pdf('realtimeTesting.pdf')
+text = extract_text_from_pdf('fulltesting.pdf')
 
-# Step 2: Split text into questions based on numbers like 1., 2., 3., etc.
-questions = re.split(r'(?=\d+\.)', text)
+# Fix: Better split that avoids splitting 10 into 1 and 0.
+questions = re.split(r'(?<!\d)(?=\d{1,2}\.\s)', text)
 
-# Step 3: Clean up each question and remove empty ones
+# Clean each question
 questions = [q.strip() for q in questions if q.strip()]
 text = questions
+print(text)
+
+total_time = time.time()
 
 def write_to_docx (language,filename):
+    
     for index , line in enumerate(text):
+        start_time = time.time()
         heading = doc.add_heading(line, level=2)
         for run in heading.runs:
              run.font.color.rgb = RGBColor(0, 0, 0)
@@ -41,8 +46,6 @@ def write_to_docx (language,filename):
         code = (main_response(line).text)
         # input = (inputtext(line).text).strip()
         code_string , output_string = split_code_output_blocks(code)
-        print(code_string)
-        print("program ended")
         code_para = doc.add_paragraph(code_string)
         code_para.paragraph_format.space_after = 0
         code_para.paragraph_format.line_spacing = 1
@@ -50,10 +53,19 @@ def write_to_docx (language,filename):
         for run in heading.runs:
              run.font.color.rgb = RGBColor(0, 0, 0)
         # doc.add_paragraph(output_string)
+
+     #    output_string = "PS C:\\Users\\Atul\\Desktop\\collegeFile> cd \"c:\\Users\\Atul\\Desktop\\collegeFile\\code\" ; if ($?) { gcc " + str(index)+ ".c -o" + str(index) + " } ; if ($?) { .\\" + str(index) + " }"
+
+             output_string = str(output_string)
+
         image_path = output_to_image(output_string, f"images/output{index}.png")        
         doc.add_picture(image_path)
         create_code_file(code_string, index)
         doc.add_paragraph("")
         doc.save( filename + '.docx')
+        endtime = time.time()
+        print("Time taken for question " + str(index) + " : " + str(endtime - start_time) + " seconds")
         # run_code(input,index)
-        # time.sleep(1)
+        time.sleep(3)
+
+print("Total time taken : " + str(time.time() - total_time) + " seconds")
