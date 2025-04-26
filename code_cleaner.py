@@ -9,16 +9,32 @@ def line_cleaner (code):
     code = "\n".join(clean_code)
     return code
 
-def split_code_output_blocks(text):
-    parts = text.split("```")
-    cleaned = [p.strip() for p in parts if p.strip()]
-    if len(cleaned) >= 2:
-        code = cleaned[0].removeprefix("c").strip()
-        output = cleaned[1].strip()
-        return code, output
-    return 0 , 0
+def split_algo_code_output(text):
+    sections = text.split("```")
+    cleaned = [s.strip() for s in sections if s.strip()]
+    
+    algorithm = ""
+    code = ""
+    output = ""
 
-name = "Karan || BCA-2B"
+    if cleaned:
+        if cleaned[0].lower().startswith("algorithm:"):
+            algorithm = cleaned[0][len("algorithm:"):].strip()
+        else:
+            algorithm = cleaned[0]
+
+    if len(cleaned) >= 2:
+        code = cleaned[1]
+        if code.startswith("c"):
+            code = code[1:].strip()
+
+    if len(cleaned) >= 3:
+        output = cleaned[2]
+
+    return algorithm, code, output
+
+
+name = "Prerit || BCA-2A"
 
 def clean_output_for_C(output):
     if (output[0].strip() == "text"):
