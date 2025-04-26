@@ -1,8 +1,14 @@
 from PIL import Image, ImageDraw, ImageFont
 
+
 def output_to_image(output_text, output_path):
-    font = ImageFont.truetype("consola.ttf", 20)
-    lines = output_text.splitlines()
+    try:
+        # font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf", 20)
+        font = ImageFont.truetype("DejaVuSansMono.ttf", 20)
+    except OSError:
+        font = ImageFont.load_default()
+
+    lines = output_text
 
     max_width = max(font.getbbox(line)[2] - font.getbbox(line)[0] for line in lines) + 20
     line_height = max(font.getbbox(line)[3] - font.getbbox(line)[1] for line in lines) + 4
@@ -16,5 +22,5 @@ def output_to_image(output_text, output_path):
         draw.text((5, y), line, font=font, fill="white")
         y += line_height
 
-    image.save(output_path,dpi=(96, 96))
+    image.save(output_path, dpi=(96, 96))
     return output_path

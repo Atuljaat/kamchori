@@ -5,6 +5,6 @@ print("Welcome to the College ki file program")
 # filename = input("Enter the filename : ")
 language = "C"
 # filename = "meriFile"
-filename = "meriFile"
+filename = "karanKiFile"
 write_to_docx(language,filename)
 print("File created successfully")

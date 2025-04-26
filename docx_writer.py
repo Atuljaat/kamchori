@@ -3,7 +3,7 @@ from docx.shared import Inches
 from pdf_reader import extract_text_from_pdf
 from getCode import response , inputtext , main_response
 from create_codeFile import create_code_file
-from code_cleaner import clean_code_for_C , line_cleaner , split_code_output_blocks
+from code_cleaner import split_code_output_blocks , clean_output_for_C
 from run_file import run_code 
 import time
 from generate_output import output_to_image
@@ -55,9 +55,10 @@ def write_to_docx (language,filename):
         # doc.add_paragraph(output_string)
 
      #    output_string = "PS C:\\Users\\Atul\\Desktop\\collegeFile> cd \"c:\\Users\\Atul\\Desktop\\collegeFile\\code\" ; if ($?) { gcc " + str(index)+ ".c -o" + str(index) + " } ; if ($?) { .\\" + str(index) + " }"
-
-             output_string = str(output_string)
-
+          
+             output_string = clean_output_for_C((str(output_string)).splitlines())
+             print(output_string)
+          
         image_path = output_to_image(output_string, f"images/output{index}.png")        
         doc.add_picture(image_path)
         create_code_file(code_string, index)

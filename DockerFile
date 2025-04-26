@@ -10,3 +10,4 @@ COPY . /app
 # Install dependencies from requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
+RUN apt install fonts-dejavu-core

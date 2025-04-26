@@ -17,3 +17,12 @@ def split_code_output_blocks(text):
         output = cleaned[1].strip()
         return code, output
     return 0 , 0
+
+name = "Karan || BCA-2B"
+
+def clean_output_for_C(output):
+    if (output[0].strip() == "text"):
+        output.pop(0)
+    if (output[0].strip() != name):
+        output.insert(0, name)
+    return output
