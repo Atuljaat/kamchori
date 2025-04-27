@@ -2,43 +2,65 @@
 #include <stdlib.h>
 
 int main() {
-printf("Prerit || BCA-2A");
-int n1, n2, n3, i, j;
+    printf("Prerit || BCA-2A");
+    int size1, size2, merged_array_size, i, j;
+    int *array1, *array2, *merged_array;
 
-printf("Enter the size of the first array: ");
-scanf("%d", &n1);
+    printf("\nEnter the size of the first array: ");
+    scanf("%d", &size1);
 
-int arr1[n1];
-printf("Enter elements of the first array:\n");
-for (i = 0; i < n1; i++) {
-scanf("%d", &arr1[i]);
-}
+    array1 = (int *)malloc(size1 * sizeof(int));
+    if (array1 == NULL) {
+        printf("Memory allocation failed for array1.\n");
+        return 1;
+    }
 
-printf("Enter the size of the second array: ");
-scanf("%d", &n2);
+    printf("Enter the elements of the first array: ");
+    for (i = 0; i < size1; i++) {
+        scanf("%d", &array1[i]);
+    }
 
-int arr2[n2];
-printf("Enter elements of the second array:\n");
-for (i = 0; i < n2; i++) {
-scanf("%d", &arr2[i]);
-}
+    printf("Enter the size of the second array: ");
+    scanf("%d", &size2);
 
-n3 = n1 + n2;
-int merged_arr[n3];
+    array2 = (int *)malloc(size2 * sizeof(int));
+    if (array2 == NULL) {
+        printf("Memory allocation failed for array2.\n");
+        free(array1);
+        return 1;
+    }
 
-for (i = 0; i < n1; i++) {
-merged_arr[i] = arr1[i];
-}
+    printf("Enter the elements of the second array: ");
+    for (i = 0; i < size2; i++) {
+        scanf("%d", &array2[i]);
+    }
 
-for (i = 0, j = n1; i < n2; i++, j++) {
-merged_arr[j] = arr2[i];
-}
+    merged_array_size = size1 + size2;
+    merged_array = (int *)malloc(merged_array_size * sizeof(int));
+    if (merged_array == NULL) {
+        printf("Memory allocation failed for merged_array.\n");
+        free(array1);
+        free(array2);
+        return 1;
+    }
 
-printf("Merged array:\n");
-for (i = 0; i < n3; i++) {
-printf("%d ", merged_arr[i]);
-}
-printf("\n");
+    for (i = 0; i < size1; i++) {
+        merged_array[i] = array1[i];
+    }
 
-return 0;
+    for (j = 0; j < size2; j++) {
+        merged_array[size1 + j] = array2[j];
+    }
+
+    printf("Merged array: ");
+    for (i = 0; i < merged_array_size; i++) {
+        printf("%d ", merged_array[i]);
+    }
+    printf("\n");
+
+    free(array1);
+    free(array2);
+    free(merged_array);
+
+    return 0;
 }

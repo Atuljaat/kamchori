@@ -1,3 +1,4 @@
+import re
 
 def clean_code_for_C(code):
     clean_code = code.replace("```c", "").replace("```", "").replace("\\n", "\n").strip()
@@ -9,29 +10,42 @@ def line_cleaner (code):
     code = "\n".join(clean_code)
     return code
 
-def split_algo_code_output(text):
-    sections = text.split("```")
-    cleaned = [s.strip() for s in sections if s.strip()]
+
+def split_gemini_response(response):
+    algo = ''
+    code = ''
+    output = ''
+
+    # Step 1: Extract Algorithm part
+    algo_match = re.search(r'Algorithm:\s*(.*?)```', response, re.DOTALL)
+    if algo_match:
+        algo = algo_match.group(1).strip()
+
+    # Step 2: Extract Code block
+    code_match = re.search(r'```c(.*?)```', response, re.DOTALL)
+    if not code_match:
+        code_match = re.search(r'```(.*?)```', response, re.DOTALL)
     
-    algorithm = ""
-    code = ""
-    output = ""
+    if code_match:
+        code = code_match.group(1).strip()
 
-    if cleaned:
-        if cleaned[0].lower().startswith("algorithm:"):
-            algorithm = cleaned[0][len("algorithm:"):].strip()
+    # Step 3: Extract Output
+    if code_match:
+        # Find the position where code block ends
+        end_pos = code_match.end()
+        remaining_text = response[end_pos:].strip()
+        
+        # Now check if remaining text has triple backticks again
+        output_match = re.search(r'```(.*?)```', remaining_text, re.DOTALL)
+        if output_match:
+            output = output_match.group(1).strip()
         else:
-            algorithm = cleaned[0]
+            # Otherwise take the plain text directly
+            output = remaining_text.strip()
 
-    if len(cleaned) >= 2:
-        code = cleaned[1]
-        if code.startswith("c"):
-            code = code[1:].strip()
+    return algo, code, output
 
-    if len(cleaned) >= 3:
-        output = cleaned[2]
 
-    return algorithm, code, output
 
 
 name = "Prerit || BCA-2A"

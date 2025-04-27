@@ -1,37 +1,33 @@
 #include <stdio.h>
 
 int main() {
-printf("Prerit || BCA-2A");
-int arr[100];
-int size, location, i;
+    printf("Prerit || BCA-2A");
+    int size, location, i;
 
-printf("Enter the size of the array: ");
-scanf("%d", &size);
+    scanf("%d", &size);
 
-printf("Enter the elements of the array: ");
-for (i = 0; i < size; i++) {
-scanf("%d", &arr[i]);
-}
+    int array[size];
 
-printf("Enter the location to delete (0 to %d): ", size - 1);
-scanf("%d", &location);
+    for (i = 0; i < size; i++) {
+        scanf("%d", &array[i]);
+    }
 
-if (location < 0 || location >= size) {
-printf("Invalid location!\n");
-return 1;
-}
+    scanf("%d", &location);
 
-for (i = location; i < size - 1; i++) {
-arr[i] = arr[i + 1];
-}
+    if (location >= size+1) {
+        printf("Invalid location.\n");
+    } else {
+        for (i = location - 1; i < size - 1; i++) {
+            array[i] = array[i + 1];
+        }
 
-size--;
+        size--;
 
-printf("Array after deletion: ");
-for (i = 0; i < size; i++) {
-printf("%d ", arr[i]);
-}
-printf("\n");
+        for (i = 0; i < size; i++) {
+            printf("%d ", array[i]);
+        }
+        printf("\n");
+    }
 
-return 0;
+    return 0;
 }

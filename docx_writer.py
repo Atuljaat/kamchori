@@ -3,7 +3,7 @@ from docx.shared import Inches, RGBColor
 from pdf_reader import extract_text_from_pdf
 from getCode import main_response
 from create_codeFile import create_code_file
-from code_cleaner import split_algo_code_output, clean_output_for_C
+from code_cleaner import split_gemini_response, clean_output_for_C
 from generate_output import output_to_image
 import time
 import re
@@ -14,7 +14,7 @@ doc.add_heading('COLLEGE KI FILE', 0)
 doc.add_page_break()
 
 # Extract questions from PDF
-text = extract_text_from_pdf('PROGRAMS.pdf')
+text = extract_text_from_pdf('fulltesting.pdf')
 questions = re.split(r'(?<!\d)(?=\d{1,2}\.\s)', text)
 questions = [q.strip() for q in questions if q.strip()]
 text = questions
@@ -36,7 +36,7 @@ def write_to_docx(filename):
         code = (main_response(line, count).text)
         print(code)
         
-        algo, code_string, output_string = split_algo_code_output(code)
+        algo, code_string, output_string = split_gemini_response(code)
         print("Printing output_text\n")
         print(output_string)
 
