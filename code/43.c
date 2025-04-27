@@ -3,76 +3,78 @@
 
 struct Node {
     int data;
-    struct Node *left, *right;
+    struct Node *left;
+    struct Node *right;
 };
 
 struct Node* createNode(int data) {
-    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    struct Node *newNode = (struct Node*)malloc(sizeof(struct Node));
     newNode->data = data;
-    newNode->left = newNode->right = NULL;
+    newNode->left = NULL;
+    newNode->right = NULL;
     return newNode;
 }
 
-struct Node* insert(struct Node* root, int data) {
+struct Node* insertNode(struct Node *root, int data) {
     if (root == NULL) {
         return createNode(data);
     }
     if (data < root->data) {
-        root->left = insert(root->left, data);
+        root->left = insertNode(root->left, data);
     } else if (data > root->data) {
-        root->right = insert(root->right, data);
+        root->right = insertNode(root->right, data);
     }
     return root;
 }
 
-void inorder(struct Node* root) {
+void inorderTraversal(struct Node *root) {
     if (root != NULL) {
-        inorder(root->left);
+        inorderTraversal(root->left);
         printf("%d ", root->data);
-        inorder(root->right);
+        inorderTraversal(root->right);
     }
 }
 
-void preorder(struct Node* root) {
+void preorderTraversal(struct Node *root) {
     if (root != NULL) {
         printf("%d ", root->data);
-        preorder(root->left);
-        preorder(root->right);
+        preorderTraversal(root->left);
+        preorderTraversal(root->right);
     }
 }
 
-void postorder(struct Node* root) {
+void postorderTraversal(struct Node *root) {
     if (root != NULL) {
-        postorder(root->left);
-        postorder(root->right);
+        postorderTraversal(root->left);
+        postorderTraversal(root->right);
         printf("%d ", root->data);
     }
 }
 
 int main() {
     printf("Prerit || BCA-2A");
-    struct Node* root = NULL;
+    struct Node *root = NULL;
     int n, data, i;
 
-    printf("\nEnter the number of nodes: ");
+    printf("\nEnter the number of nodes to insert: ");
     scanf("%d", &n);
 
     printf("Enter the data for each node: ");
     for (i = 0; i < n; i++) {
         scanf("%d", &data);
-        root = insert(root, data);
+        root = insertNode(root, data);
     }
 
-    printf("Inorder traversal: ");
-    inorder(root);
+    printf("Inorder Traversal: ");
+    inorderTraversal(root);
     printf("\n");
 
-    printf("Preorder traversal: ");
-    preorder(root);
+    printf("Preorder Traversal: ");
+    preorderTraversal(root);
     printf("\n");
 
-    printf("Postorder traversal: ");
-    postorder(root);
+    printf("Postorder Traversal: ");
+    postorderTraversal(root);
     printf("\n");
 
     return 0;

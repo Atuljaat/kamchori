@@ -3,82 +3,75 @@
 #include <string.h>
 #include <ctype.h>
 
-#define MAX 100
-
-char stack[MAX];
-int top = -1;
-
-void push(char item) {
-    stack[++top] = item;
-}
-
-char pop() {
-    return stack[top--];
-}
-
-int precedence(char symbol) {
-    if (symbol == '^')
-        return 3;
-    else if (symbol == '*' || symbol == '/')
-        return 2;
-    else if (symbol == '+' || symbol == '-')
-        return 1;
-    else
-        return 0;
-}
-
-void infixToPrefix(char infix[], char prefix[]) {
-    int i, j = 0;
-    char symbol;
-    char temp[MAX];
-    int len = strlen(infix);
-
-    for (i = 0; i < len; i++) {
-        temp[i] = infix[len - 1 - i];
-        if (temp[i] == '(')
-            temp[i] = ')';
-        else if (temp[i] == ')')
-            temp[i] = '(';
+int precedence(char operator) {
+    switch (operator) {
+        case '+':
+        case '-':
+            return 1;
+        case '*':
+        case '/':
+            return 2;
+        case '^':
+            return 3;
+        default:
+            return 0;
     }
-    temp[len] = '\0';
-    strcpy(infix, temp);
+}
 
+void infixToPrefix(char *infix, char *prefix) {
+    int i, j = 0;
+    int len = strlen(infix);
+    char stack[len];
+    int top = -1;
+
+    char reversedInfix[len + 1];
     for (i = 0; i < len; i++) {
-        symbol = infix[i];
+        reversedInfix[i] = infix[len - 1 - i];
+        if (reversedInfix[i] == '(')
+            reversedInfix[i] = ')';
+        else if (reversedInfix[i] == ')')
+            reversedInfix[i] = '(';
+    }
+    reversedInfix[len] = '\0';
 
-        if (isalnum(symbol)) {
-            prefix[j++] = symbol;
-        } else if (symbol == '(') {
-            push(symbol);
-        } else if (symbol == ')') {
-            while (stack[top] != '(') {
-                prefix[j++] = pop();
+    for (i = 0; reversedInfix[i] != '\0'; i++) {
+        if (isalnum(reversedInfix[i])) {
+            prefix[j++] = reversedInfix[i];
+        } else if (reversedInfix[i] == '(') {
+            stack[++top] = reversedInfix[i];
+        } else if (reversedInfix[i] == ')') {
+            while (top >= 0 && stack[top] != '(') {
+                prefix[j++] = stack[top--];
             }
-            pop();
+            if (top >= 0 && stack[top] == '(')
+                top--;
         } else {
-            while (top != -1 && precedence(symbol) <= precedence(stack[top])) {
-                prefix[j++] = pop();
+            while (top >= 0 && precedence(reversedInfix[i]) <= precedence(stack[top])) {
+                prefix[j++] = stack[top--];
             }
-            push(symbol);
+            stack[++top] = reversedInfix[i];
         }
     }
 
-    while (top != -1) {
-        prefix[j++] = pop();
+    while (top >= 0) {
+        prefix[j++] = stack[top--];
     }
 
     prefix[j] = '\0';
-    len = strlen(prefix);
-    for (i = 0; i < len / 2; i++) {
-        char t = prefix[i];
-        prefix[i] = prefix[len - 1 - i];
-        prefix[len - 1 - i] = t;
+
+    char tempPrefix[j + 1];
+    for (i = 0; i < j; i++) {
+        tempPrefix[i] = prefix[j - 1 - i];
     }
+    tempPrefix[j] = '\0';
+
+    strcpy(prefix, tempPrefix);
 }
 
 int main() {
     printf("Prerit || BCA-2A");
-    char infix[MAX], prefix[MAX];
+    char infix[100];
+    char prefix[100];
 
     printf("\nEnter infix expression: ");
     scanf("%s", infix);

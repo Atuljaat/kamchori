@@ -2,23 +2,20 @@
 
 int main() {
     printf("Prerit || BCA-2A");
-    int n, first = 0, second = 1, next, i;
+    int n, i, a = 0, b = 1, nextTerm;
 
-    printf("\nEnter the number of terms: ");
+    printf("Enter the number of terms: ");
     scanf("%d", &n);
 
     printf("Fibonacci Series: ");
+    printf("%d %d ", a, b);
 
-    for (i = 0; i < n; i++) {
-        if (i <= 1)
-            next = i;
-        else {
-            next = first + second;
-            first = second;
-            second = next;
-        }
-        printf("%d ", next);
+    for (i = 3; i <= n; ++i) {
+        nextTerm = a + b;
+        printf("%d ", nextTerm);
+        a = b;
+        b = nextTerm;
     }
-    printf("\n");
+
     return 0;
 }

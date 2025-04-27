@@ -5,18 +5,33 @@ int main() {
     printf("Prerit || BCA-2A");
     int n, i, j;
 
-    printf("\nEnter the size of the matrix: ");
+    printf("\nEnter the size of the square matrix: ");
     scanf("%d", &n);
 
     int upper[n][n], lower[n][n], tridiagonal[n][n];
 
-    printf("\nEnter elements for the Upper Triangular Matrix:\n");
+    printf("\nEnter elements for the Upper Triangular matrix (row-wise):\n");
+    for (i = 0; i < n; i++) {
+        for (j = i; j < n; j++) {
+            printf("Enter element [%d][%d]: ", i, j);
+            scanf("%d", &upper[i][j]);
+        }
+    }
+
+    printf("\nEnter elements for the Lower Triangular matrix (row-wise):\n");
+    for (i = 0; i < n; i++) {
+        for (j = 0; j <= i; j++) {
+            printf("Enter element [%d][%d]: ", i, j);
+            scanf("%d", &lower[i][j]);
+        }
+    }
+
+    printf("\nEnter elements for the Tridiagonal matrix (row-wise):\n");
     for (i = 0; i < n; i++) {
         for (j = 0; j < n; j++) {
-            if (j >= i) {
-                scanf("%d", &upper[i][j]);
-            } else {
-                upper[i][j] = 0;
+            if (i == j || i == j - 1 || i == j + 1) {
+                printf("Enter element [%d][%d]: ", i, j);
+                scanf("%d", &tridiagonal[i][j]);
             }
         }
     }
@@ -24,45 +39,32 @@ int main() {
     printf("\nUpper Triangular Matrix:\n");
     for (i = 0; i < n; i++) {
         for (j = 0; j < n; j++) {
-            printf("%d ", upper[i][j]);
+            if (i <= j)
+                printf("%d\t", upper[i][j]);
+            else
+                printf("0\t");
         }
         printf("\n");
-    }
-
-    printf("\nEnter elements for the Lower Triangular Matrix:\n");
-    for (i = 0; i < n; i++) {
-        for (j = 0; j < n; j++) {
-            if (j <= i) {
-                scanf("%d", &lower[i][j]);
-            } else {
-                lower[i][j] = 0;
-            }
-        }
     }
 
     printf("\nLower Triangular Matrix:\n");
     for (i = 0; i < n; i++) {
         for (j = 0; j < n; j++) {
-            printf("%d ", lower[i][j]);
+            if (i >= j)
+                printf("%d\t", lower[i][j]);
+            else
+                printf("0\t");
         }
         printf("\n");
     }
 
-    printf("\nEnter elements for the Tri-diagonal Matrix:\n");
+    printf("\nTridiagonal Matrix:\n");
     for (i = 0; i < n; i++) {
         for (j = 0; j < n; j++) {
-            if (abs(i - j) <= 1) {
-                scanf("%d", &tridiagonal[i][j]);
-            } else {
-                tridiagonal[i][j] = 0;
-            }
-        }
-    }
-
-    printf("\nTri-diagonal Matrix:\n");
-    for (i = 0; i < n; i++) {
-        for (j = 0; j < n; j++) {
-            printf("%d ", tridiagonal[i][j]);
+            if (i == j || i == j - 1 || i == j + 1)
+                printf("%d\t", tridiagonal[i][j]);
+            else
+                printf("0\t");
         }
         printf("\n");
     }

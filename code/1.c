@@ -2,41 +2,51 @@
 
 int main() {
     printf("Prerit || BCA-2A");
-    int n, key, i, first_occurrence = -1, count = 0;
+    int n, key, firstOccurrence = -1;
+    int arr[100];
+    int allOccurrences[100];
+    int count = 0;
 
-    printf("\nEnter the size of the array: ");
+    printf("\nEnter the size: ");
     scanf("%d", &n);
 
-    int arr[n];
-
-    printf("Enter the elements of the array: ");
-    for (i = 0; i < n; i++) {
+    printf("Enter elements: ");
+    for (int i = 0; i < n; i++) {
         scanf("%d", &arr[i]);
     }
 
-    printf("Enter the element to be searched: ");
+    printf("Enter search item: ");
     scanf("%d", &key);
 
-    for (i = 0; i < n; i++) {
+    for (int i = 0; i < n; i++) {
         if (arr[i] == key) {
-            first_occurrence = i;
+            firstOccurrence = i;
             break;
         }
     }
 
-    if (first_occurrence == -1) {
+    if (firstOccurrence == -1) {
         printf("Element not found\n");
     } else {
-        printf("First occurrence at index: %d\n", first_occurrence);
+        printf("First occurrence at index: %d\n", firstOccurrence);
     }
 
-    for (i = 0; i < n; i++) {
+    for (int i = 0; i < n; i++) {
         if (arr[i] == key) {
-            printf("Occurrence at index: %d\n", i);
+            allOccurrences[count] = i;
             count++;
         }
     }
-if(first_occurrence != -1 && count == 0)
-{
-}
+
+    if (count == 0) {
+        printf("Element not found\n");
+    } else {
+        printf("All occurrences at indices: ");
+        for (int i = 0; i < count; i++) {
+            printf("%d ", allOccurrences[i]);
+        }
+        printf("\n");
+    }
+
+    return 0;
 }

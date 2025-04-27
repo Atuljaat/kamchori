@@ -1,18 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAX 10
+#define MAX_SIZE 5
 
-int stack[MAX];
+int stack[MAX_SIZE];
 int top = -1;
 
-void push(int value) {
-    if (top == MAX - 1) {
+void push(int element) {
+    if (top == MAX_SIZE - 1) {
         printf("Stack Overflow\n");
     } else {
         top++;
-        stack[top] = value;
-        printf("Pushed %d onto the stack\n", value);
+        stack[top] = element;
+        printf("Element %d pushed onto the stack\n", element);
     }
 }
 
@@ -20,7 +20,7 @@ void pop() {
     if (top == -1) {
         printf("Stack Underflow\n");
     } else {
-        printf("Popped %d from the stack\n", stack[top]);
+        printf("Element %d popped from the stack\n", stack[top]);
         top--;
     }
 }
@@ -39,7 +39,7 @@ void traverse() {
 
 int main() {
     printf("Prerit || BCA-2A");
-    int choice, value;
+    int choice, element;
 
     do {
         printf("\nStack Operations:\n");
@@ -52,9 +52,9 @@ int main() {
 
         switch (choice) {
             case 1:
-                printf("Enter value to push: ");
-                scanf("%d", &value);
-                push(value);
+                printf("Enter element to push: ");
+                scanf("%d", &element);
+                push(element);
                 break;
             case 2:
                 pop();
@@ -63,7 +63,7 @@ int main() {
                 traverse();
                 break;
             case 4:
-                printf("Exiting...\n");
+                printf("Exiting program\n");
                 break;
             default:
                 printf("Invalid choice\n");

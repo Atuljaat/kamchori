@@ -2,27 +2,28 @@
 
 int main() {
     printf("Prerit || BCA-2A");
-    int intArray[5] = {10, 20, 30, 40, 50};
-    float floatArray[5];
-    int n, i;
+    int int_array[] = {10, 20, 30, 40, 50};
+    int int_array_size = sizeof(int_array) / sizeof(int);
+    int float_array_size;
+    float float_array[100];
 
-    printf("Enter the number of elements for the floating-point array (up to 5): ");
-    scanf("%d", &n);
+    printf("\nEnter the size of the floating-point array: ");
+    scanf("%d", &float_array_size);
 
-    printf("Enter %d floating-point elements:\n", n);
-    for (i = 0; i < n; i++) {
-        scanf("%f", &floatArray[i]);
+    printf("Enter the elements of the floating-point array:\n");
+    for (int i = 0; i < float_array_size; i++) {
+        scanf("%f", &float_array[i]);
     }
 
-    printf("Integer Array Elements:\n");
-    for (i = 0; i < 5; i++) {
-        printf("%d ", intArray[i]);
+    printf("\nInteger Array Elements:\n");
+    for (int i = 0; i < int_array_size; i++) {
+        printf("%d ", int_array[i]);
     }
     printf("\n");
 
-    printf("Floating-Point Array Elements:\n");
-    for (i = 0; i < n; i++) {
-        printf("%.2f ", floatArray[i]);
+    printf("\nFloating-Point Array Elements:\n");
+    for (int i = 0; i < float_array_size; i++) {
+        printf("%f ", float_array[i]);
     }
     printf("\n");
 

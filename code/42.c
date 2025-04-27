@@ -19,13 +19,11 @@ struct Node* insertNode(struct Node* root, int data) {
     if (root == NULL) {
         return createNode(data);
     }
-
     if (data < root->data) {
         root->left = insertNode(root->left, data);
     } else if (data > root->data) {
         root->right = insertNode(root->right, data);
     }
-
     return root;
 }
 
@@ -56,19 +54,26 @@ void postorderTraversal(struct Node* root) {
 int main() {
     printf("Prerit || BCA-2A");
     struct Node* root = NULL;
-    root = insertNode(root, 50);
-    insertNode(root, 30);
-    insertNode(root, 20);
-    insertNode(root, 40);
-    insertNode(root, 70);
-    insertNode(root, 60);
-    insertNode(root, 80);
+    int n, data, i;
+
+    printf("\nEnter the number of nodes: ");
+    scanf("%d", &n);
+
+    for (i = 0; i < n; i++) {
+        printf("Enter data for node %d: ", i + 1);
+        scanf("%d", &data);
+        root = insertNode(root, data);
+    }
 
     printf("\nInorder traversal: ");
     inorderTraversal(root);
-    printf("\nPreorder traversal: ");
+    printf("\n");
+
+    printf("Preorder traversal: ");
     preorderTraversal(root);
-    printf("\nPostorder traversal: ");
+    printf("\n");
+
+    printf("Postorder traversal: ");
     postorderTraversal(root);
     printf("\n");
 

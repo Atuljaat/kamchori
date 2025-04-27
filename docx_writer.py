@@ -1,7 +1,7 @@
 from docx import Document
 from docx.shared import Inches, RGBColor
 from pdf_reader import extract_text_from_pdf
-from getCode import main_response
+from getCode import main_response, algo_response
 from create_codeFile import create_code_file
 from code_cleaner import split_gemini_response, clean_output_for_C
 from generate_output import output_to_image
@@ -34,11 +34,15 @@ def write_to_docx(filename):
             run.font.color.rgb = RGBColor(0, 0, 0)
         
         code = (main_response(line, count).text)
-        print(code)
+        # print(code)
         
         algo, code_string, output_string = split_gemini_response(code)
-        print("Printing output_text\n")
-        print(output_string)
+        # print("Printing output_text\n")
+        # print(output_string)
+
+        algo = algo_response(code_string, count)
+        print(algo)
+
 
         # Write Algorithm
         heading = doc.add_heading('Algorithm', level=3)

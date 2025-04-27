@@ -2,13 +2,23 @@
 
 int main() {
     printf("Prerit || BCA-2A");
-    int arr[] = {12, 5, 8, 2, 15, 7};
-    int size = sizeof(arr) / sizeof(arr[0]);
+    int size, i;
+
+    printf("Enter the size of the array: ");
+    scanf("%d", &size);
+
+    int arr[size];
+
+    printf("Enter the elements of the array:\n");
+    for (i = 0; i < size; i++) {
+        scanf("%d", &arr[i]);
+    }
+
     int min = arr[0];
     int max = arr[0];
     int sum = 0;
-    float average;
-    for (int i = 0; i < size; i++) {
+
+    for (i = 0; i < size; i++) {
         if (arr[i] < min) {
             min = arr[i];
         }
@@ -17,10 +27,13 @@ int main() {
         }
         sum += arr[i];
     }
-    average = (float)sum / size;
-    printf("\nMinimum element: %d", min);
-    printf("\nMaximum element: %d", max);
-    printf("\nSum of elements: %d", sum);
-    printf("\nAverage of elements: %.2f", average);
+
+    float average = (float)sum / size;
+
+    printf("Minimum element: %d\n", min);
+    printf("Maximum element: %d\n", max);
+    printf("Sum of elements: %d\n", sum);
+    printf("Average of elements: %.2f\n", average);
+
     return 0;
 }

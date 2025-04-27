@@ -9,7 +9,7 @@ int main() {
 
     int arr[n];
 
-    printf("Enter elements:\n");
+    printf("Enter the elements of the array: ");
     for (i = 0; i < n; i++) {
         scanf("%d", &arr[i]);
     }
@@ -25,7 +25,7 @@ int main() {
         arr[j + 1] = key;
     }
 
-    printf("Sorted array:\n");
+    printf("Sorted array: ");
     for (i = 0; i < n; i++) {
         printf("%d ", arr[i]);
     }

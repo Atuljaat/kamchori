@@ -1,64 +1,81 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct Node {
+struct Node {
     int data;
     int priority;
-    struct Node *next;
-} Node;
+};
 
-Node *head[4];
+int queue1[100], queue2[100], queue3[100];
+int front1 = -1, rear1 = -1;
+int front2 = -1, rear2 = -1;
+int front3 = -1, rear3 = -1;
 
 void enqueue(int data, int priority) {
-    Node *newNode = (Node *)malloc(sizeof(Node));
-    if (newNode == NULL) {
-        printf("Memory allocation failed\n");
-        return;
-    }
-    newNode->data = data;
-    newNode->priority = priority;
-    newNode->next = NULL;
-
-    if (head[priority] == NULL) {
-        head[priority] = newNode;
-    } else {
-        Node *current = head[priority];
-        while (current->next != NULL) {
-            current = current->next;
+    if (priority == 1) {
+        if (rear1 == 99) printf("Queue 1 is full\n");
+        else {
+            if (front1 == -1) front1 = 0;
+            queue1[++rear1] = data;
         }
-        current->next = newNode;
+    } else if (priority == 2) {
+        if (rear2 == 99) printf("Queue 2 is full\n");
+        else {
+            if (front2 == -1) front2 = 0;
+            queue2[++rear2] = data;
+        }
+    } else if (priority == 3) {
+        if (rear3 == 99) printf("Queue 3 is full\n");
+        else {
+            if (front3 == -1) front3 = 0;
+            queue3[++rear3] = data;
+        }
+    } else {
+        printf("Invalid priority\n");
     }
 }
 
 int dequeue() {
-    for (int i = 3; i >= 1; i--) {
-        if (head[i] != NULL) {
-            Node *temp = head[i];
-            int data = temp->data;
-            head[i] = temp->next;
-            free(temp);
-            return data;
-        }
+    if (front3 != -1) {
+        int data = queue3[front3++];
+        if (front3 > rear3) front3 = rear3 = -1;
+        return data;
+    } else if (front2 != -1) {
+        int data = queue2[front2++];
+        if (front2 > rear2) front2 = rear2 = -1;
+        return data;
+    } else if (front1 != -1) {
+        int data = queue1[front1++];
+        if (front1 > rear1) front1 = rear1 = -1;
+        return data;
+    } else {
+        printf("Queue is empty\n");
+        return -1;
     }
-    return -1;
 }
 
-int isEmpty() {
-    for (int i = 1; i <= 3; i++) {
-        if (head[i] != NULL) {
-            return 0;
+void displayQueues() {
+    printf("Queue 3: ");
+    if (front3 == -1) printf("Empty\n");
+    else {
+        for (int i = front3; i <= rear3; i++) {
+            printf("%d ", queue3[i]);
         }
+        printf("\n");
     }
-    return 1;
-}
-
-void display() {
-    for (int i = 3; i >= 1; i--) {
-        printf("Priority %d: ", i);
-        Node *current = head[i];
-        while (current != NULL) {
-            printf("%d ", current->data);
-            current = current->next;
+    printf("Queue 2: ");
+    if (front2 == -1) printf("Empty\n");
+    else {
+        for (int i = front2; i <= rear2; i++) {
+            printf("%d ", queue2[i]);
+        }
+        printf("\n");
+    }
+    printf("Queue 1: ");
+    if (front1 == -1) printf("Empty\n");
+    else {
+        for (int i = front1; i <= rear1; i++) {
+            printf("%d ", queue1[i]);
         }
         printf("\n");
     }
@@ -66,23 +83,41 @@ void display() {
 
 int main() {
     printf("Prerit || BCA-2A");
-    for (int i = 0; i <= 3; i++)
-        head[i] = NULL;
+    int choice, data, priority;
 
-    enqueue(10, 2);
-    enqueue(14, 3);
-    enqueue(16, 1);
-    enqueue(12, 2);
-    enqueue(18, 3);
+    do {
+        printf("\nPriority Queue Menu:\n");
+        printf("1. Enqueue\n");
+        printf("2. Dequeue\n");
+        printf("3. Display Queues\n");
+        printf("4. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
 
-    printf("Priority Queue:\n");
-    display();
-
-    printf("Dequeued: %d\n", dequeue());
-    printf("Dequeued: %d\n", dequeue());
-
-    printf("Priority Queue after dequeues:\n");
-    display();
+        switch (choice) {
+            case 1:
+                printf("Enter data to enqueue: ");
+                scanf("%d", &data);
+                printf("Enter priority (1: Lowest, 2, 3: Highest): ");
+                scanf("%d", &priority);
+                enqueue(data, priority);
+                break;
+            case 2:
+                data = dequeue();
+                if (data != -1) {
+                    printf("Dequeued element: %d\n", data);
+                }
+                break;
+            case 3:
+                displayQueues();
+                break;
+            case 4:
+                printf("Exiting program\n");
+                break;
+            default:
+                printf("Invalid choice\n");
+        }
+    } while (choice != 4);
 
     return 0;
 }

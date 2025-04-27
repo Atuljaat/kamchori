@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAX 5
-
-int queue[MAX];
-int front = -1, rear = -1;
+int queue[100];
+int front = -1;
+int rear = -1;
+int size;
 
 void insert(int element) {
-    if (rear == MAX - 1) {
+    if (rear == size - 1) {
         printf("Queue Overflow\n");
         return;
     }
@@ -15,35 +15,39 @@ void insert(int element) {
         front = 0;
     rear++;
     queue[rear] = element;
-    printf("Inserted %d into the queue\n", element);
+    printf("Inserted %d\n", element);
 }
 
-int delete() {
+void delete_element() {
     if (front == -1 || front > rear) {
         printf("Queue Underflow\n");
-        return -1;
+        return;
     }
-    int element = queue[front];
+    printf("Deleted element is %d\n", queue[front]);
     front++;
-    printf("Deleted %d from the queue\n", element);
-    return element;
+    if (front > rear) {
+        front = -1;
+        rear = -1;
+    }
 }
 
 void display() {
+    int i;
     if (front == -1 || front > rear) {
         printf("Queue is empty\n");
         return;
     }
     printf("Queue elements are:\n");
-    for (int i = front; i <= rear; i++) {
+    for (i = front; i <= rear; i++)
         printf("%d ", queue[i]);
-    }
     printf("\n");
 }
 
 int main() {
     printf("Prerit || BCA-2A");
     int choice, element;
+    printf("\nEnter the size of Queue: ");
+    scanf("%d", &size);
     while (1) {
         printf("\nQueue Operations:\n");
         printf("1. Insert\n");
@@ -59,7 +63,7 @@ int main() {
                 insert(element);
                 break;
             case 2:
-                delete();
+                delete_element();
                 break;
             case 3:
                 display();

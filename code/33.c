@@ -1,18 +1,18 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
+#include <stdlib.h>
 
 struct Stack {
     int top;
     unsigned capacity;
-    char* array;
+    char *array;
 };
 
 struct Stack* createStack(unsigned capacity) {
-    struct Stack* stack = (struct Stack*)malloc(sizeof(struct Stack));
+    struct Stack* stack = (struct Stack*) malloc(sizeof(struct Stack));
     stack->capacity = capacity;
     stack->top = -1;
-    stack->array = (char*)malloc(stack->capacity * sizeof(char));
+    stack->array = (char*) malloc(stack->capacity * sizeof(char));
     return stack;
 }
 
@@ -54,7 +54,6 @@ int main() {
         printf("%c", pop(stack));
     }
     printf("\n");
-
     free(stack->array);
     free(stack);
 

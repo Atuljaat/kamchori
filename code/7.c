@@ -2,15 +2,19 @@
 
 int main() {
     printf("Prerit || BCA-2A");
-    int arr[100], n, i, j, key, found = 0;
+    int arr[100], n, i, key, found = 0, j;
+
     printf("Enter the size of the array: ");
     scanf("%d", &n);
+
     printf("Enter the elements of the array: ");
     for (i = 0; i < n; i++) {
         scanf("%d", &arr[i]);
     }
-    printf("Enter the element to be deleted: ");
+
+    printf("Enter the number to be searched and deleted: ");
     scanf("%d", &key);
+
     for (i = 0; i < n; i++) {
         if (arr[i] == key) {
             found = 1;
@@ -21,6 +25,7 @@ int main() {
             break;
         }
     }
+
     if (found == 1) {
         printf("Element deleted successfully.\n");
         printf("Updated array: ");
@@ -31,5 +36,6 @@ int main() {
     } else {
         printf("Element not found.\n");
     }
+
     return 0;
 }

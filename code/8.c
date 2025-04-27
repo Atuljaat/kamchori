@@ -1,32 +1,45 @@
 #include <stdio.h>
+#include <stdlib.h>
 
-int binarySearch(int arr[], int low, int high, int x) {
-  while (low <= high) {
-    int mid = low + (high - low) / 2;
-    if (arr[mid] == x)
-      return mid;
-    if (arr[mid] < x)
-      low = mid + 1;
-    else
-      high = mid - 1;
-  }
-  return -1;
+int binarySearch(int arr[], int target, int low, int high) {
+    while (low <= high) {
+        int mid = (low + high) / 2;
+        if (arr[mid] == target) {
+            return mid;
+        } else if (arr[mid] < target) {
+            low = mid + 1;
+        } else {
+            high = mid - 1;
+        }
+    }
+    return -1;
 }
 
 int main() {
-  printf("Prerit || BCA-2A");
-  int arr[100], n, x, result;
-  printf("\nEnter the size of the array: ");
-  scanf("%d", &n);
-  printf("Enter the elements of the sorted array: ");
-  for (int i = 0; i < n; i++)
-    scanf("%d", &arr[i]);
-  printf("Enter the element to search: ");
-  scanf("%d", &x);
-  result = binarySearch(arr, 0, n - 1, x);
-  if (result == -1)
-    printf("Element is not present in array");
-  else
-    printf("Element is present at index %d", result);
-  return 0;
+    printf("Prerit || BCA-2A");
+    int size, target, i, index;
+
+    printf("Enter the size of the array: ");
+    scanf("%d", &size);
+
+    int *arr = (int *)malloc(size * sizeof(int));
+
+    printf("Enter the sorted elements of the array:\n");
+    for (i = 0; i < size; i++) {
+        scanf("%d", &arr[i]);
+    }
+
+    printf("Enter the target element to search for: ");
+    scanf("%d", &target);
+
+    index = binarySearch(arr, target, 0, size - 1);
+
+    if (index == -1) {
+        printf("Element not found\n");
+    } else {
+        printf("Element found at index: %d\n", index);
+    }
+
+    free(arr);
+    return 0;
 }

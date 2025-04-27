@@ -2,7 +2,8 @@
 
 int main() {
     printf("Prerit || BCA-2A");
-    int arr[100], size, num, location, i;
+    int arr[100];
+    int size, num, location, i;
 
     printf("Enter the size of the array: ");
     scanf("%d", &size);
@@ -18,14 +19,19 @@ int main() {
     printf("Enter the location at which to insert the number: ");
     scanf("%d", &location);
 
-    for (i = size - 1; i >= location - 1; i--) {
+    if (location < 0 || location > size) {
+        printf("Invalid location. Location should be between 0 and %d\n", size);
+        return 1;
+    }
+
+    for (i = size - 1; i >= location; i--) {
         arr[i + 1] = arr[i];
     }
 
-    arr[location - 1] = num;
+    arr[location] = num;
     size++;
 
-    printf("Resultant array is: ");
+    printf("The modified array is: ");
     for (i = 0; i < size; i++) {
         printf("%d ", arr[i]);
     }

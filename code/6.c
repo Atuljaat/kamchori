@@ -2,29 +2,31 @@
 
 int main() {
     printf("Prerit || BCA-2A");
-    int size, location, i;
+    int arr[100], n, position, i;
 
-    scanf("%d", &size);
+    printf("Enter the size of array: ");
+    scanf("%d", &n);
 
-    int array[size];
-
-    for (i = 0; i < size; i++) {
-        scanf("%d", &array[i]);
+    printf("Enter elements of array: ");
+    for (i = 0; i < n; i++) {
+        scanf("%d", &arr[i]);
     }
 
-    scanf("%d", &location);
+    printf("Enter the position to delete: ");
+    scanf("%d", &position);
 
-    if (location >= size+1) {
-        printf("Invalid location.\n");
+    if (position < 1 || position > n) {
+        printf("Invalid position\n");
     } else {
-        for (i = location - 1; i < size - 1; i++) {
-            array[i] = array[i + 1];
+        for (i = position - 1; i < n - 1; i++) {
+            arr[i] = arr[i + 1];
         }
 
-        size--;
+        n--;
 
-        for (i = 0; i < size; i++) {
-            printf("%d ", array[i]);
+        printf("Resultant array: ");
+        for (i = 0; i < n; i++) {
+            printf("%d ", arr[i]);
         }
         printf("\n");
     }

@@ -2,64 +2,85 @@
 #include <stdlib.h>
 
 struct Node {
-int data;
-struct Node *next;
-struct Node *prev;
+    int data;
+    struct Node *next;
+    struct Node *prev;
 };
 
 struct Node *head = NULL;
-struct Node *tail = NULL;
 
-void insertAtEnd(int value) {
-struct Node *newNode = (struct Node*)malloc(sizeof(struct Node));
-newNode->data = value;
-newNode->next = NULL;
-if (head == NULL) {
-newNode->prev = NULL;
-head = newNode;
-tail = newNode;
-} else {
-newNode->prev = tail;
-tail->next = newNode;
-tail = newNode;
-}
+void insertAtEnd(int data) {
+    struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = NULL;
+    newNode->prev = NULL;
+
+    if (head == NULL) {
+        head = newNode;
+        return;
+    }
+
+    struct Node *temp = head;
+    while (temp->next != NULL) {
+        temp = temp->next;
+    }
+
+    temp->next = newNode;
+    newNode->prev = temp;
 }
 
-void displayList() {
-struct Node *current = head;
-while (current != NULL) {
-printf("%d ", current->data);
-current = current->next;
-}
-printf("\n");
+void traverseList() {
+    if (head == NULL) {
+        printf("List is empty\n");
+        return;
+    }
+
+    struct Node *temp = head;
+    printf("List elements: ");
+    while (temp != NULL) {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+    printf("\n");
 }
 
 void searchElement(int key) {
-struct Node *current = head;
-while (current != NULL) {
-if (current->data == key) {
-printf("Element found\n");
-return;
-}
-current = current->next;
-}
-printf("Element not found\n");
+    if (head == NULL) {
+        printf("List is empty\n");
+        return;
+    }
+
+    struct Node *temp = head;
+    while (temp != NULL) {
+        if (temp->data == key) {
+            printf("Element found\n");
+            return;
+        }
+        temp = temp->next;
+    }
+
+    printf("Element not found\n");
 }
 
 int main() {
-printf("Prerit || BCA-2A");
-int n, value, key;
-printf("Enter the number of elements: ");
-scanf("%d", &n);
-printf("Enter the elements: ");
-for (int i = 0; i < n; i++) {
-scanf("%d", &value);
-insertAtEnd(value);
-}
-printf("Doubly Linked List: ");
-displayList();
-printf("Enter the element to search: ");
-scanf("%d", &key);
-searchElement(key);
-return 0;
+    printf("Prerit || BCA-2A");
+    int n, data, key;
+
+    printf("\nEnter the number of elements: ");
+    scanf("%d", &n);
+
+    printf("Enter the elements: ");
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &data);
+        insertAtEnd(data);
+    }
+
+    traverseList();
+
+    printf("Enter the element to search: ");
+    scanf("%d", &key);
+
+    searchElement(key);
+
+    return 0;
 }

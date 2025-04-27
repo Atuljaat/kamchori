@@ -1,130 +1,148 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct Node {
+struct Term {
     int coefficient;
     int exponent;
-    struct Node *next;
+    struct Term *next;
 };
 
-struct Node *createNode(int coefficient, int exponent) {
-    struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
-    newNode->coefficient = coefficient;
-    newNode->exponent = exponent;
-    newNode->next = NULL;
-    return newNode;
+struct Term *createTerm(int coefficient, int exponent) {
+    struct Term *newTerm = (struct Term *)malloc(sizeof(struct Term));
+    newTerm->coefficient = coefficient;
+    newTerm->exponent = exponent;
+    newTerm->next = NULL;
+    return newTerm;
 }
 
-void insertTerm(struct Node **poly, int coefficient, int exponent) {
-    struct Node *newNode = createNode(coefficient, exponent);
+void insertTerm(struct Term **poly, int coefficient, int exponent) {
+    struct Term *newTerm = createTerm(coefficient, exponent);
     if (*poly == NULL) {
-        *poly = newNode;
-    } else {
-        struct Node *temp = *poly;
-        while (temp->next != NULL) {
-            temp = temp->next;
-        }
-        temp->next = newNode;
+        *poly = newTerm;
+        return;
     }
+
+    if (exponent > (*poly)->exponent) {
+        newTerm->next = *poly;
+        *poly = newTerm;
+        return;
+    }
+
+    struct Term *curr = *poly;
+    struct Term *prev = NULL;
+
+    while (curr != NULL && curr->exponent > exponent) {
+        prev = curr;
+        curr = curr->next;
+    }
+
+    if (curr != NULL && curr->exponent == exponent) return;
+
+    newTerm->next = curr;
+    if(prev != NULL)
+        prev->next = newTerm;
+    else
+        *poly = newTerm;
 }
 
-struct Node *addPolynomials(struct Node *poly1, struct Node *poly2) {
-    struct Node *result = NULL;
-    struct Node *p1 = poly1;
-    struct Node *p2 = poly2;
-
-    while (p1 != NULL && p2 != NULL) {
-        if (p1->exponent > p2->exponent) {
-            insertTerm(&result, p1->coefficient, p1->exponent);
-            p1 = p1->next;
-        } else if (p1->exponent < p2->exponent) {
-            insertTerm(&result, p2->coefficient, p2->exponent);
-            p2 = p2->next;
-        } else {
-            int sum = p1->coefficient + p2->coefficient;
-            if (sum != 0) {
-                insertTerm(&result, sum, p1->exponent);
-            }
-            p1 = p1->next;
-            p2 = p2->next;
-        }
+struct Term *createPolynomial() {
+    int n, coefficient, exponent;
+    struct Term *poly = NULL;
+    printf("Enter the number of terms: ");
+    scanf("%d", &n);
+    for (int i = 0; i < n; i++) {
+        printf("Enter coefficient and exponent for term %d: ", i + 1);
+        scanf("%d %d", &coefficient, &exponent);
+        insertTerm(&poly, coefficient, exponent);
     }
-
-    while (p1 != NULL) {
-        insertTerm(&result, p1->coefficient, p1->exponent);
-        p1 = p1->next;
-    }
-
-    while (p2 != NULL) {
-        insertTerm(&result, p2->coefficient, p2->exponent);
-        p2 = p2->next;
-    }
-
-    return result;
+    return poly;
 }
 
-void displayPolynomial(struct Node *poly) {
+void displayPolynomial(struct Term *poly) {
     if (poly == NULL) {
         printf("0\n");
         return;
     }
 
-    struct Node *temp = poly;
-    while (temp != NULL) {
-        printf("%dx^%d", temp->coefficient, temp->exponent);
-        temp = temp->next;
-        if (temp != NULL) {
+    struct Term *curr = poly;
+    while (curr != NULL) {
+        printf("%dx^%d", curr->coefficient, curr->exponent);
+        curr = curr->next;
+        if (curr != NULL) {
             printf(" + ");
         }
     }
     printf("\n");
 }
 
-void freePolynomial(struct Node *poly) {
-    struct Node *temp;
-    while (poly != NULL) {
-        temp = poly;
-        poly = poly->next;
+struct Term *addPolynomials(struct Term *poly1, struct Term *poly2) {
+    struct Term *result = NULL;
+    struct Term *curr1 = poly1;
+    struct Term *curr2 = poly2;
+
+    while (curr1 != NULL && curr2 != NULL) {
+        if (curr1->exponent == curr2->exponent) {
+            int sum = curr1->coefficient + curr2->coefficient;
+            if (sum != 0) {
+                insertTerm(&result, sum, curr1->exponent);
+            }
+            curr1 = curr1->next;
+            curr2 = curr2->next;
+        } else if (curr1->exponent > curr2->exponent) {
+            insertTerm(&result, curr1->coefficient, curr1->exponent);
+            curr1 = curr1->next;
+        } else {
+            insertTerm(&result, curr2->coefficient, curr2->exponent);
+            curr2 = curr2->next;
+        }
+    }
+
+    while (curr1 != NULL) {
+        insertTerm(&result, curr1->coefficient, curr1->exponent);
+        curr1 = curr1->next;
+    }
+
+    while (curr2 != NULL) {
+        insertTerm(&result, curr2->coefficient, curr2->exponent);
+        curr2 = curr2->next;
+    }
+
+    return result;
+}
+
+void freePolynomial(struct Term *poly) {
+    struct Term *curr = poly;
+    while (curr != NULL) {
+        struct Term *temp = curr;
+        curr = curr->next;
         free(temp);
     }
 }
 
 int main() {
     printf("Prerit || BCA-2A");
-    struct Node *poly1 = NULL;
-    struct Node *poly2 = NULL;
-    struct Node *result = NULL;
-    int n1, n2, coeff, exp, i;
+    struct Term *poly1, *poly2, *sum;
 
-    printf("\nEnter the number of terms in polynomial 1: ");
-    scanf("%d", &n1);
-    printf("Enter the terms of polynomial 1 (coefficient exponent):\n");
-    for (i = 0; i < n1; i++) {
-        scanf("%d %d", &coeff, &exp);
-        insertTerm(&poly1, coeff, exp);
-    }
+    printf("\nPolynomial 1:\n");
+    poly1 = createPolynomial();
 
-    printf("\nEnter the number of terms in polynomial 2: ");
-    scanf("%d", &n2);
-    printf("Enter the terms of polynomial 2 (coefficient exponent):\n");
-    for (i = 0; i < n2; i++) {
-        scanf("%d %d", &coeff, &exp);
-        insertTerm(&poly2, coeff, exp);
-    }
+    printf("\nPolynomial 2:\n");
+    poly2 = createPolynomial();
 
     printf("\nPolynomial 1: ");
     displayPolynomial(poly1);
+
     printf("Polynomial 2: ");
     displayPolynomial(poly2);
 
-    result = addPolynomials(poly1, poly2);
+    sum = addPolynomials(poly1, poly2);
 
     printf("\nSum of the polynomials: ");
-    displayPolynomial(result);
+    displayPolynomial(sum);
 
     freePolynomial(poly1);
     freePolynomial(poly2);
-    freePolynomial(result);
+    freePolynomial(sum);
 
     return 0;
 }

@@ -9,14 +9,14 @@ struct Node {
 struct Node *head = NULL;
 
 void insertAtBeginning(int data) {
-    struct Node *newNode = (struct Node*)malloc(sizeof(struct Node));
+    struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
     newNode->data = data;
     newNode->next = head;
     head = newNode;
 }
 
 void insertAtEnd(int data) {
-    struct Node *newNode = (struct Node*)malloc(sizeof(struct Node));
+    struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
     newNode->data = data;
     newNode->next = NULL;
     if (head == NULL) {
@@ -35,11 +35,13 @@ void insertAtPosition(int data, int position) {
         insertAtBeginning(data);
         return;
     }
-    struct Node *newNode = (struct Node*)malloc(sizeof(struct Node));
+    struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
     newNode->data = data;
     struct Node *temp = head;
-    for (int i = 1; i < position - 1 && temp != NULL; i++) {
+    int i = 1;
+    while (i < position - 1 && temp != NULL) {
         temp = temp->next;
+        i++;
     }
     if (temp == NULL) {
         printf("Invalid position\n");
@@ -49,15 +51,21 @@ void insertAtPosition(int data, int position) {
     temp->next = newNode;
 }
 
-void deleteFromBeginning() {
-    if (head == NULL) return;
+void deleteAtBeginning() {
+    if (head == NULL) {
+        printf("List is empty\n");
+        return;
+    }
     struct Node *temp = head;
     head = head->next;
     free(temp);
 }
 
-void deleteFromEnd() {
-    if (head == NULL) return;
+void deleteAtEnd() {
+    if (head == NULL) {
+        printf("List is empty\n");
+        return;
+    }
     if (head->next == NULL) {
         free(head);
         head = NULL;
@@ -71,15 +79,20 @@ void deleteFromEnd() {
     temp->next = NULL;
 }
 
-void deleteFromPosition(int position) {
-    if (head == NULL) return;
+void deleteAtPosition(int position) {
+    if (head == NULL) {
+        printf("List is empty\n");
+        return;
+    }
     if (position == 1) {
-        deleteFromBeginning();
+        deleteAtBeginning();
         return;
     }
     struct Node *temp = head;
-    for (int i = 1; i < position - 1 && temp != NULL; i++) {
+    int i = 1;
+    while (i < position - 1 && temp != NULL) {
         temp = temp->next;
+        i++;
     }
     if (temp == NULL || temp->next == NULL) {
         printf("Invalid position\n");
@@ -90,7 +103,7 @@ void deleteFromPosition(int position) {
     free(nodeToDelete);
 }
 
-void displayList() {
+void display() {
     if (head == NULL) {
         printf("List is empty\n");
         return;
@@ -106,19 +119,18 @@ void displayList() {
 int main() {
     printf("Prerit || BCA-2A");
     int choice, data, position;
-    do {
+    while (1) {
         printf("\nSingly Linked List Operations:\n");
         printf("1. Insert at Beginning\n");
         printf("2. Insert at End\n");
         printf("3. Insert at Position\n");
-        printf("4. Delete from Beginning\n");
-        printf("5. Delete from End\n");
-        printf("6. Delete from Position\n");
-        printf("7. Display List\n");
+        printf("4. Delete at Beginning\n");
+        printf("5. Delete at End\n");
+        printf("6. Delete at Position\n");
+        printf("7. Display\n");
         printf("8. Exit\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
-
         switch (choice) {
             case 1:
                 printf("Enter data to insert: ");
@@ -138,25 +150,24 @@ int main() {
                 insertAtPosition(data, position);
                 break;
             case 4:
-                deleteFromBeginning();
+                deleteAtBeginning();
                 break;
             case 5:
-                deleteFromEnd();
+                deleteAtEnd();
                 break;
             case 6:
                 printf("Enter position to delete from: ");
                 scanf("%d", &position);
-                deleteFromPosition(position);
+                deleteAtPosition(position);
                 break;
             case 7:
-                displayList();
+                display();
                 break;
             case 8:
-                printf("Exiting program.\n");
-                break;
+                exit(0);
             default:
-                printf("Invalid choice. Please try again.\n");
+                printf("Invalid choice\n");
         }
-    } while (choice != 8);
+    }
     return 0;
 }

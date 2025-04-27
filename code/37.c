@@ -11,42 +11,53 @@ struct Queue {
     struct Node* rear;
 };
 
-struct Queue* createQueue() {
-    struct Queue* q = (struct Queue*)malloc(sizeof(struct Queue));
-    q->front = q->rear = NULL;
-    return q;
+int isEmpty(struct Queue* queue) {
+    return (queue->front == NULL);
 }
 
-void enqueue(struct Queue* q, int data) {
+void insert(struct Queue* queue, int data) {
     struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
-    newNode->data = data;
-    newNode->next = NULL;
-    if (q->rear == NULL) {
-        q->front = q->rear = newNode;
+    if (newNode == NULL) {
+        printf("Memory allocation failed\n");
         return;
     }
-    q->rear->next = newNode;
-    q->rear = newNode;
+    newNode->data = data;
+    newNode->next = NULL;
+
+    if (isEmpty(queue)) {
+        queue->front = newNode;
+        queue->rear = newNode;
+    } else {
+        queue->rear->next = newNode;
+        queue->rear = newNode;
+    }
+    printf("Inserted: %d\n", data);
 }
 
-int dequeue(struct Queue* q) {
-    if (q->front == NULL)
-        return -1;
-    struct Node* temp = q->front;
-    int data = temp->data;
-    q->front = q->front->next;
-    if (q->front == NULL)
-        q->rear = NULL;
-    free(temp);
-    return data;
-}
-
-void display(struct Queue* q) {
-    struct Node* temp = q->front;
-    if(temp == NULL){
+void delete(struct Queue* queue) {
+    if (isEmpty(queue)) {
         printf("Queue is empty\n");
         return;
     }
+
+    struct Node* temp = queue->front;
+    queue->front = queue->front->next;
+
+    if (queue->front == NULL) {
+        queue->rear = NULL;
+    }
+
+    printf("Deleted: %d\n", temp->data);
+    free(temp);
+}
+
+void display(struct Queue* queue) {
+    if (isEmpty(queue)) {
+        printf("Queue is empty\n");
+        return;
+    }
+
+    struct Node* temp = queue->front;
     printf("Queue elements: ");
     while (temp != NULL) {
         printf("%d ", temp->data);
@@ -57,13 +68,15 @@ void display(struct Queue* q) {
 
 int main() {
     printf("Prerit || BCA-2A");
-    struct Queue* q = createQueue();
+    struct Queue queue;
+    queue.front = NULL;
+    queue.rear = NULL;
     int choice, data;
 
     do {
         printf("\nQueue Operations:\n");
-        printf("1. Enqueue\n");
-        printf("2. Dequeue\n");
+        printf("1. Insert\n");
+        printf("2. Delete\n");
         printf("3. Display\n");
         printf("4. Exit\n");
         printf("Enter your choice: ");
@@ -71,19 +84,15 @@ int main() {
 
         switch (choice) {
             case 1:
-                printf("Enter data to enqueue: ");
+                printf("Enter data to insert: ");
                 scanf("%d", &data);
-                enqueue(q, data);
+                insert(&queue, data);
                 break;
             case 2:
-                data = dequeue(q);
-                if (data == -1)
-                    printf("Queue is empty\n");
-                else
-                    printf("Dequeued element: %d\n", data);
+                delete(&queue);
                 break;
             case 3:
-                display(q);
+                display(&queue);
                 break;
             case 4:
                 printf("Exiting program\n");

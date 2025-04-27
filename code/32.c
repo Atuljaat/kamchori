@@ -1,95 +1,54 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <ctype.h>
 
-#define MAX_SIZE 100
+int stack[100];
+int top = -1;
 
-typedef struct {
-    int top;
-    int items[MAX_SIZE];
-} Stack;
-
-void initialize(Stack *s) {
-    s->top = -1;
+void push(int item) {
+    stack[++top] = item;
 }
 
-int isEmpty(Stack *s) {
-    return (s->top == -1);
-}
-
-int isFull(Stack *s) {
-    return (s->top == MAX_SIZE - 1);
-}
-
-void push(Stack *s, int value) {
-    if (isFull(s)) {
-        printf("Stack Overflow\n");
-        return;
-    }
-    s->items[++s->top] = value;
-}
-
-int pop(Stack *s) {
-    if (isEmpty(s)) {
-        printf("Stack Underflow\n");
-        return -1;
-    }
-    return s->items[s->top--];
-}
-
-int evaluatePostfix(char *expression) {
-    Stack stack;
-    initialize(&stack);
-    int i, operand1, operand2, result;
-
-    for (i = 0; expression[i] != '\0'; i++) {
-        if (isdigit(expression[i])) {
-            push(&stack, expression[i] - '0');
-        } else if (expression[i] == ' ') {
-            continue;
-        }
-        else {
-            operand2 = pop(&stack);
-            operand1 = pop(&stack);
-
-            switch (expression[i]) {
-                case '+':
-                    result = operand1 + operand2;
-                    break;
-                case '-':
-                    result = operand1 - operand2;
-                    break;
-                case '*':
-                    result = operand1 * operand2;
-                    break;
-                case '/':
-                    result = operand1 / operand2;
-                    break;
-                default:
-                    printf("Invalid Operator\n");
-                    return -1;
-            }
-            push(&stack, result);
-        }
-    }
-    return pop(&stack);
+int pop() {
+    return stack[top--];
 }
 
 int main() {
     printf("Prerit || BCA-2A");
-    char expression[MAX_SIZE];
+    char expression[100];
+    char *e;
+    int n1, n2, num, result;
 
-    printf("\nEnter a postfix expression: ");
-    fgets(expression, sizeof(expression), stdin);
+    printf("Enter postfix expression: ");
+    scanf("%s", expression);
 
-    expression[strcspn(expression, "\n")] = 0;
+    e = expression;
 
-    int result = evaluatePostfix(expression);
-
-    if (result != -1) {
-        printf("Result: %d\n", result);
+    while (*e != '\0') {
+        if (isdigit(*e)) {
+            num = *e - 48;
+            push(num);
+        } else {
+            n1 = pop();
+            n2 = pop();
+            switch (*e) {
+                case '+':
+                    result = n2 + n1;
+                    break;
+                case '-':
+                    result = n2 - n1;
+                    break;
+                case '*':
+                    result = n2 * n1;
+                    break;
+                case '/':
+                    result = n2 / n1;
+                    break;
+            }
+            push(result);
+        }
+        e++;
     }
-
+    printf("Result of expression: %d\n", pop());
     return 0;
 }

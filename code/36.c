@@ -1,15 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct StackNode {
+struct Node {
     int data;
-    struct StackNode* next;
+    struct Node* next;
 };
 
-struct StackNode* top = NULL;
+struct Node* top = NULL;
 
 void push(int data) {
-    struct StackNode* newNode = (struct StackNode*)malloc(sizeof(struct StackNode));
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
     if (newNode == NULL) {
         printf("Stack Overflow\n");
         return;
@@ -19,28 +19,27 @@ void push(int data) {
     top = newNode;
 }
 
-int pop() {
+void pop() {
     if (top == NULL) {
         printf("Stack Underflow\n");
-        return -1;
+        return;
     }
-    struct StackNode* temp = top;
-    int data = top->data;
+    struct Node* temp = top;
     top = top->next;
+    printf("Popped element: %d\n", temp->data);
     free(temp);
-    return data;
 }
 
 void traverse() {
-    struct StackNode* current = top;
-    if (current == NULL) {
+    if (top == NULL) {
         printf("Stack is empty\n");
         return;
     }
+    struct Node* temp = top;
     printf("Stack elements: ");
-    while (current != NULL) {
-        printf("%d ", current->data);
-        current = current->next;
+    while (temp != NULL) {
+        printf("%d ", temp->data);
+        temp = temp->next;
     }
     printf("\n");
 }
@@ -48,6 +47,7 @@ void traverse() {
 int main() {
     printf("Prerit || BCA-2A");
     int choice, data;
+
     do {
         printf("\nStack Operations:\n");
         printf("1. Push\n");
@@ -64,18 +64,16 @@ int main() {
                 push(data);
                 break;
             case 2:
-                data = pop();
-                if (data != -1)
-                    printf("Popped element: %d\n", data);
+                pop();
                 break;
             case 3:
                 traverse();
                 break;
             case 4:
-                printf("Exiting program\n");
+                printf("Exiting program.\n");
                 break;
             default:
-                printf("Invalid choice\n");
+                printf("Invalid choice. Please try again.\n");
         }
     } while (choice != 4);
 

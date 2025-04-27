@@ -2,74 +2,64 @@
 #include <stdlib.h>
 
 struct Node {
-int data;
-struct Node *next;
+    int data;
+    struct Node *next;
 };
 
-struct Node* createNode(int data) {
-struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
-newNode->data = data;
-newNode->next = NULL;
-return newNode;
+struct Node* createList(int n) {
+    struct Node *head = NULL, *temp = NULL, *newNode = NULL;
+    int i;
+
+    head = (struct Node*)malloc(sizeof(struct Node));
+    printf("Enter data for node 1: ");
+    scanf("%d", &(head->data));
+    head->next = NULL;
+    temp = head;
+
+    for (i = 2; i <= n; i++) {
+        newNode = (struct Node*)malloc(sizeof(struct Node));
+        printf("Enter data for node %d: ", i);
+        scanf("%d", &(newNode->data));
+        newNode->next = NULL;
+        temp->next = newNode;
+        temp = newNode;
+    }
+    return head;
 }
 
-void insertEnd(struct Node** head, int data) {
-struct Node* newNode = createNode(data);
-if (*head == NULL) {
-*head = newNode;
-return;
-}
-struct Node* temp = *head;
-while (temp->next != NULL) {
-temp = temp->next;
-}
-temp->next = newNode;
+struct Node* reverseList(struct Node *head) {
+    struct Node *prev = NULL, *current = head, *next = NULL;
+    while (current != NULL) {
+        next = current->next;
+        current->next = prev;
+        prev = current;
+        current = next;
+    }
+    return prev;
 }
 
-struct Node* reverseList(struct Node* head) {
-struct Node* reversedList = NULL;
-struct Node* current = head;
-
-while (current != NULL) {
-struct Node* newNode = createNode(current->data);
-newNode->next = reversedList;
-reversedList = newNode;
-current = current->next;
-}
-return reversedList;
-}
-
-void printList(struct Node* head) {
-struct Node* temp = head;
-while (temp != NULL) {
-printf("%d ", temp->data);
-temp = temp->next;
-}
-printf("\n");
+void displayList(struct Node *head) {
+    struct Node *temp = head;
+    while (temp != NULL) {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+    printf("\n");
 }
 
 int main() {
-printf("Prerit || BCA-2A");
-int n, data, i;
-struct Node* head = NULL;
-struct Node* reversedHead = NULL;
+    Prerit || BCA-2A
+    int n;
+    struct Node *head = NULL, *reversedHead = NULL;
 
-printf("Enter the size: ");
-scanf("%d", &n);
+    printf("Enter the size of the linked list: ");
+    scanf("%d", &n);
 
-printf("Enter elements: ");
-for (i = 0; i < n; i++) {
-scanf("%d", &data);
-insertEnd(&head, data);
-}
+    head = createList(n);
+    reversedHead = reverseList(head);
 
-printf("Original List: ");
-printList(head);
+    printf("Reversed Linked List: ");
+    displayList(reversedHead);
 
-reversedHead = reverseList(head);
-
-printf("Reversed List: ");
-printList(reversedHead);
-
-return 0;
+    return 0;
 }

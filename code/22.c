@@ -2,158 +2,122 @@
 #include <stdlib.h>
 
 struct Node {
-int data;
-struct Node* next;
+    int data;
+    struct Node *next;
 };
 
-struct Node* createNode(int data) {
-struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
-newNode->data = data;
-newNode->next = NULL;
-return newNode;
+struct Node *insertAtEnd(struct Node *list, int data) {
+    struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = NULL;
+    if (list == NULL) {
+        return newNode;
+    }
+    struct Node *temp = list;
+    while (temp->next != NULL) {
+        temp = temp->next;
+    }
+    temp->next = newNode;
+    return list;
 }
 
-void insertNode(struct Node** head, int data) {
-struct Node* newNode = createNode(data);
-if (*head == NULL) {
-*head = newNode;
-return;
-}
-struct Node* temp = *head;
-while (temp->next != NULL) {
-temp = temp->next;
-}
-temp->next = newNode;
+struct Node *createList(struct Node *list, int size) {
+    int data;
+    for (int i = 0; i < size; i++) {
+        scanf("%d", &data);
+        list = insertAtEnd(list, data);
+    }
+    return list;
 }
 
-struct Node* createList() {
-int size, data;
-struct Node* head = NULL;
-printf("Enter the size: ");
-scanf("%d", &size);
-printf("Enter elements: ");
-for (int i = 0; i < size; i++) {
-scanf("%d", &data);
-insertNode(&head, data);
-}
-return head;
+struct Node *mergeSortedLists(struct Node *list1, struct Node *list2) {
+    struct Node *mergedList = NULL;
+    struct Node *tail = NULL;
+
+    while (list1 != NULL && list2 != NULL) {
+        struct Node *newNode;
+        if (list1->data <= list2->data) {
+            newNode = list1;
+            list1 = list1->next;
+        } else {
+            newNode = list2;
+            list2 = list2->next;
+        }
+
+        if (mergedList == NULL) {
+            mergedList = newNode;
+            tail = newNode;
+        } else {
+            tail->next = newNode;
+            tail = newNode;
+        }
+        newNode->next = NULL;
+    }
+
+    if (list1 != NULL) {
+        if (mergedList == NULL) {
+            mergedList = list1;
+        } else {
+            tail->next = list1;
+        }
+    }
+
+    if (list2 != NULL) {
+        if (mergedList == NULL) {
+            mergedList = list2;
+        } else {
+            tail->next = list2;
+        }
+    }
+
+    return mergedList;
 }
 
-void displayList(struct Node* head) {
-if (head == NULL) {
-printf("List is empty\n");
-return;
-}
-struct Node* temp = head;
-while (temp != NULL) {
-printf("%d ", temp->data);
-temp = temp->next;
-}
-printf("\n");
+
+void printList(struct Node *list) {
+    struct Node *temp = list;
+    while (temp != NULL) {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+    printf("\n");
 }
 
-struct Node* mergeSortedLists(struct Node* list1, struct Node* list2) {
-struct Node* mergedList = NULL;
-struct Node* tail = NULL;
-
-while (list1 != NULL && list2 != NULL) {
-struct Node* newNode;
-if (list1->data <= list2->data) {
-newNode = createNode(list1->data);
-list1 = list1->next;
-} else {
-newNode = createNode(list2->data);
-list2 = list2->next;
+void freeList(struct Node *list) {
+    struct Node *temp;
+    while (list != NULL) {
+        temp = list;
+        list = list->next;
+        free(temp);
+    }
 }
 
-if (mergedList == NULL) {
-mergedList = newNode;
-tail = newNode;
-} else {
-tail->next = newNode;
-tail = newNode;
-}
-}
-
-while (list1 != NULL) {
-struct Node* newNode = createNode(list1->data);
-if (mergedList == NULL) {
-mergedList = newNode;
-tail = newNode;
-} else {
-tail->next = newNode;
-tail = newNode;
-}
-list1 = list1->next;
-}
-
-while (list2 != NULL) {
-struct Node* newNode = createNode(list2->data);
-if (mergedList == NULL) {
-mergedList = newNode;
-tail = newNode;
-} else {
-tail->next = newNode;
-tail = newNode;
-}
-list2 = list2->next;
-}
-
-return mergedList;
-}
-
-void sortList(struct Node* head) {
-if (head == NULL || head->next == NULL) {
-return;
-}
-
-struct Node* current;
-struct Node* index;
-int temp;
-
-for (current = head; current != NULL; current = current->next) {
-for (index = current->next; index != NULL; index = index->next) {
-if (current->data > index->data) {
-temp = current->data;
-current->data = index->data;
-index->data = temp;
-}
-}
-}
-}
-
-void freeList(struct Node* head) {
-struct Node* temp;
-while (head != NULL) {
-temp = head;
-head = head->next;
-free(temp);
-}
-}
 
 int main() {
-printf("Prerit || BCA-2A");
-struct Node* list1;
-struct Node* list2;
-struct Node* mergedList;
+    printf("Prerit || BCA-2A");
+    struct Node *list1 = NULL;
+    struct Node *list2 = NULL;
+    struct Node *mergedList = NULL;
+    int size1, size2;
 
-printf("\nCreating List 1:\n");
-list1 = createList();
+    printf("Enter the size of list1: ");
+    scanf("%d", &size1);
+    printf("Enter elements for list1: ");
+    list1 = createList(list1, size1);
 
-printf("\nCreating List 2:\n");
-list2 = createList();
+    printf("Enter the size of list2: ");
+    scanf("%d", &size2);
+    printf("Enter elements for list2: ");
+    list2 = createList(list2, size2);
 
-sortList(list1);
-sortList(list2);
+    mergedList = mergeSortedLists(list1, list2);
 
-mergedList = mergeSortedLists(list1, list2);
+    printf("Merged sorted list: ");
+    printList(mergedList);
 
-printf("\nMerged and Sorted List:\n");
-displayList(mergedList);
+    freeList(list1);
+    freeList(list2);
+    freeList(mergedList);
 
-freeList(list1);
-freeList(list2);
-freeList(mergedList);
-
-return 0;
+    return 0;
 }
